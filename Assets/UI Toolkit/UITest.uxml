@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="width: 50%; height: 20%; left: 25%; opacity: 0.4; background-color: rgb(255, 255, 255);">
+        <ui:Label text="Press &quot;E&quot; to interact" display-tooltip-when-elided="true" style="width: 100%; height: 100%; -unity-font: resource(&apos;Fonts/Inter/Inter-SemiBold&apos;); opacity: 1; color: rgb(0, 0, 0); -unity-text-align: middle-center; -unity-font-style: bold; font-size: 50%;" />
+    </ui:VisualElement>
+</ui:UXML>
