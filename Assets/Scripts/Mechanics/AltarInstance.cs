@@ -12,14 +12,16 @@ using UnityEngine;
 public class AltarInstance : MonoBehaviour
 {
     public bool activatable;
-    private GameObject m_lastSeenPlayer;
-    private PlayerModel m_model = Simulation.GetModel<PlayerModel>();
+    private GameObject _lastSeenPlayer;
+    private PlayerController _lastSeenPlayerController;
+    private PlayerModel m_model = GetModel<PlayerModel>();
 
     private void Update()
     {
         if (!activatable || !Input.GetButtonDown("Fire1")) return;
         var ev = Schedule<ActivateAltar>();
-        ev.Player = m_lastSeenPlayer;
+        ev.Player = _lastSeenPlayer;
+        ev.PlayerController = _lastSeenPlayerController;
         EndAltarActivation();
     }
 
@@ -28,7 +30,7 @@ public class AltarInstance : MonoBehaviour
         //only execute OnPlayerEnter if the player collides with this token.
         var player = other.gameObject;
         var playerCtrller = player.GetComponent<PlayerController>();
-        if (playerCtrller != null && m_model.ActivePlayer == playerCtrller) BeginAltarActivation(player);
+        if (playerCtrller != null && m_model.ActivePlayer == playerCtrller && playerCtrller.health.CanActivateAltar) BeginAltarActivation(player, playerCtrller);
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -36,17 +38,19 @@ public class AltarInstance : MonoBehaviour
         if (other.gameObject.GetComponent<PlayerController>() != null) EndAltarActivation();
     }
 
-    void BeginAltarActivation(GameObject player)
+    void BeginAltarActivation(GameObject player, PlayerController playerController)
     {
         activatable = true;
-        m_lastSeenPlayer = player;
+        _lastSeenPlayer = player;
+        _lastSeenPlayerController = playerController;
         Schedule<PlayerAltarCollision>();
     }
 
     void EndAltarActivation()
     {
         activatable = false;
-        m_lastSeenPlayer = null;
+        _lastSeenPlayer = null;
+        _lastSeenPlayerController = null;
         Schedule<PlayerAltarCollisionEnded>();
 
     }

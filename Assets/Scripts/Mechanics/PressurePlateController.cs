@@ -23,7 +23,7 @@ namespace Platformer.Mechanics
         }
 
         public int tickThreshold = 12;
-        public int tickInterval = 20;
+        public int tickInterval = 10;
 
         private PressurePlateInstance[] _pressurePlateInstances;
         private void Awake()

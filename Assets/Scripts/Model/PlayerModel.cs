@@ -55,7 +55,6 @@ namespace Platformer.Model
         public void Register(PlayerController player)
         {
             players.Add(player);
-            player.Id = players.Count - 1;
         }
 
         public void DeRegister(PlayerController player)

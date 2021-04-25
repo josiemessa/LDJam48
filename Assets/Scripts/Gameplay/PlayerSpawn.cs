@@ -1,6 +1,7 @@
 using Platformer.Core;
 using Platformer.Mechanics;
 using Platformer.Model;
+using Platformer.UI;
 
 namespace Platformer.Gameplay
 {
@@ -16,15 +17,16 @@ namespace Platformer.Gameplay
             spawnedPlayer.collider2d.enabled = true;
             // if (spawnedPlayer.audioSource && spawnedPlayer.respawnAudio)
             //     spawnedPlayer.audioSource.PlayOneShot(spawnedPlayer.respawnAudio);
-            // TODO: manage health of copies
-            spawnedPlayer.health.Increment();
+            spawnedPlayer.health.maxHP = 1;
             // spawnedPlayer.Teleport(model.spawnPoint.transform.position);
             spawnedPlayer.jumpState = PlayerController.JumpState.Grounded;
             // player.animator.SetBool("dead", false);
             spawnedPlayer.ControlEnabled = false;
 
-            var ev = Simulation.Schedule<EnablePlayerInput>(2f);
+            var ev = Simulation.Schedule<EnablePlayerInput>(1f);
             ev.Player = spawnedPlayer;
+            Simulation.GetModel<HUDModel>().UIController.Display(Panel.SwitchPlayer);
+            Simulation.Schedule<CloseSwitchPlayer>(5f);
         }
     }
 }

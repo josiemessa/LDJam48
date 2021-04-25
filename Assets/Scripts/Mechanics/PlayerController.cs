@@ -6,6 +6,8 @@ using Platformer.Gameplay;
 using static Platformer.Core.Simulation;
 using Platformer.Model;
 using Platformer.Core;
+using Platformer.UI;
+using TMPro;
 
 namespace Platformer.Mechanics
 {
@@ -29,6 +31,12 @@ namespace Platformer.Mechanics
         /// Initial jump velocity at the start of a jump.
         /// </summary>
         public float jumpTakeOffSpeed = 7;
+
+        /// <summary>
+        /// How much horizontal axis input is required to get the player to start moving,
+        /// and conversely stop moving.
+        /// </summary>
+        public float moveThreshold = 0.1f;
 
         public JumpState jumpState = JumpState.Grounded;
         private bool m_stopJump;
@@ -58,19 +66,49 @@ namespace Platformer.Mechanics
         SpriteRenderer spriteRenderer;
 
         // internal Animator animator;
-        readonly PlayerModel model = GetModel<PlayerModel>();
+        private readonly PlayerModel _model = GetModel<PlayerModel>();
+        public TMP_Text healthText;
 
         public Bounds Bounds => collider2d.bounds;
 
         void Awake()
         {
+            // set up player
+            Id = _model.players.Count;
             _underControlIcon = transform.GetChild(0).gameObject;
+
+            // set up health
             health = GetComponent<Health>();
-            // audioSource = GetComponent<AudioSource>();
+            var hudModel = GetModel<HUDModel>();
+            switch (Id)
+            {
+                case 0:
+                    hudModel.UIController.Display(Panel.HealthDisplay1);
+                    healthText = hudModel.UIController.HealthText1;
+                    break;
+                case 1:
+                    hudModel.UIController.Display(Panel.HealthDisplay2);
+                    healthText = hudModel.UIController.HealthText2;
+                    health.maxHP = 1;
+                    break;
+                default:
+                    Debug.Log($"unknown player ID {Id}");
+                    break;
+            }
+
+            healthText.text = $"{health.maxHP}";
+
             collider2d = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
+            // audioSource = GetComponent<AudioSource>();
             // animator = GetComponent<Animator>();
-            model.Register(this);
+
+            _model.Register(this);
+        }
+
+        protected override void Start()
+        {
+            health.playerController = this;
         }
 
         protected override void Update()
@@ -131,7 +169,7 @@ namespace Platformer.Mechanics
         {
             if (jump && IsGrounded)
             {
-                velocity.y = jumpTakeOffSpeed * model.jumpModifier;
+                velocity.y = jumpTakeOffSpeed * _model.jumpModifier;
                 jump = false;
             }
             else if (m_stopJump)
@@ -139,7 +177,7 @@ namespace Platformer.Mechanics
                 m_stopJump = false;
                 if (velocity.y > 0)
                 {
-                    velocity.y = velocity.y * model.jumpDeceleration;
+                    velocity.y = velocity.y * _model.jumpDeceleration;
                 }
             }
 
@@ -150,6 +188,8 @@ namespace Platformer.Mechanics
 
             // animator.SetBool("grounded", IsGrounded);
             // animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
+
+            if (Mathf.Abs(move.x) < moveThreshold) move.x = 0;
 
             targetVelocity = move * maxSpeed;
         }

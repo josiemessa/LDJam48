@@ -1,5 +1,8 @@
 using System;
+using Platformer.Core;
 using Platformer.Gameplay;
+using Platformer.Model;
+using TMPro;
 using UnityEngine;
 using static Platformer.Core.Simulation;
 
@@ -20,6 +23,12 @@ namespace Platformer.Mechanics
         /// </summary>
         public bool IsAlive => currentHP > 0;
 
+        /// <summary>
+        /// Indicates whether the player has enough HP to be able to activate the altar
+        /// </summary>
+        public bool CanActivateAltar => currentHP > 1;
+
+        public PlayerController playerController;
         int currentHP;
 
         /// <summary>
@@ -28,6 +37,7 @@ namespace Platformer.Mechanics
         public void Increment()
         {
             currentHP = Mathf.Clamp(currentHP + 1, 0, maxHP);
+            playerController.healthText.text = $"{currentHP}";
         }
 
         /// <summary>
@@ -37,6 +47,7 @@ namespace Platformer.Mechanics
         public void Decrement()
         {
             currentHP = Mathf.Clamp(currentHP - 1, 0, maxHP);
+            playerController.healthText.text = $"{currentHP}";
             if (currentHP == 0)
             {
                 var ev = Schedule<HealthIsZero>();
