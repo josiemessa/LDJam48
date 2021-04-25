@@ -11,6 +11,14 @@ public class PressurePlateInstance : MonoBehaviour
     public PressurePlateController PlateController;
     private int _ticks;
     private int _elapsedTickInterval = 0;
+    private SpriteRenderer _spriteRenderer;
+
+    public Color colour = new Color(57, 195, 181);
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     public int Ticks
     {
@@ -36,12 +44,17 @@ public class PressurePlateInstance : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        if (other.gameObject.GetComponent<PlayerController>() == null) return;
+        _spriteRenderer.color = Color.white;
+
         var ev = Simulation.Schedule<PressurePlateDeactivated>();
         ev.Instance = this;
     }
 
     private void OnPressurePlate(bool force)
     {
+        _spriteRenderer.color = colour;
+
         if (!force)
         {
             _elapsedTickInterval++;

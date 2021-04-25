@@ -65,7 +65,7 @@ namespace Platformer.Mechanics
 
         SpriteRenderer spriteRenderer;
 
-        // internal Animator animator;
+        private Animator _animator;
         private readonly PlayerModel _model = GetModel<PlayerModel>();
         public TMP_Text healthText;
 
@@ -101,7 +101,7 @@ namespace Platformer.Mechanics
             collider2d = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             // audioSource = GetComponent<AudioSource>();
-            // animator = GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
 
             _model.Register(this);
         }
@@ -187,9 +187,9 @@ namespace Platformer.Mechanics
                 spriteRenderer.flipX = true;
 
             // animator.SetBool("grounded", IsGrounded);
-            // animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             if (Mathf.Abs(move.x) < moveThreshold) move.x = 0;
+            _animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             targetVelocity = move * maxSpeed;
         }
