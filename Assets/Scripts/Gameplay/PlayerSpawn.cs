@@ -25,7 +25,7 @@ namespace Platformer.Gameplay
 
             var ev = Simulation.Schedule<EnablePlayerInput>(1f);
             ev.Player = spawnedPlayer;
-            Simulation.GetModel<HUDModel>().UIController.Display(Panel.SwitchPlayer);
+            Simulation.GetModel<HUDModel>().UIController.Display(Panel.SwitchBody);
             Simulation.Schedule<CloseSwitchPlayer>(5f);
         }
     }

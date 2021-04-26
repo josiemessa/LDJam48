@@ -84,11 +84,11 @@ namespace Platformer.Mechanics
             {
                 case 0:
                     hudModel.UIController.Display(Panel.HealthDisplay1);
-                    healthText = hudModel.UIController.HealthText1;
+                    healthText = hudModel.UIController.healthText1;
                     break;
                 case 1:
                     hudModel.UIController.Display(Panel.HealthDisplay2);
-                    healthText = hudModel.UIController.HealthText2;
+                    healthText = hudModel.UIController.healthText2;
                     health.maxHP = 1;
                     break;
                 default:

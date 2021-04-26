@@ -12,41 +12,63 @@ namespace Platformer.UI
     /// </summary>
     public class MainUIController : MonoBehaviour
     {
+        [SerializeField] private GameObject interactionHintPanel;
+        public TMP_Text interactionHintText;
 
-        [SerializeField]
-        private GameObject ActivationTextOverlay;
+        [SerializeField] private GameObject healthPanel1;
+        public TMP_Text healthText1;
 
-        [SerializeField]
-        private GameObject HealthPanel1;
+        [SerializeField] private GameObject healthPanel2;
+        public TMP_Text healthText2;
 
-        public TMP_Text HealthText1;
+        [SerializeField] private GameObject healthPanel3;
+        public TMP_Text healthText3;
 
-        [SerializeField]
-        private GameObject HealthPanel2;
-
-        public TMP_Text HealthText2;
-
-        [SerializeField]
-        private GameObject SwitchPlayerOverlay;
+        [SerializeField] private GameObject switchBodyPanel;
+        [SerializeField] private GameObject magicTreePanel;
+        [SerializeField] private GameObject ancientAltarPanel;
+        [SerializeField] private GameObject recipePanel;
+        [SerializeField] private GameObject healthPotionPanel;
+        [SerializeField] private GameObject magicCrystalPanel;
 
         public void Display(Panel panelName)
         {
             switch (panelName)
             {
-                case Panel.ActivateAltar:
-                    ActivationTextOverlay.SetActive(true);
-                    SwitchPlayerOverlay.SetActive(false);
+                case Panel.InteractionHint:
+                    interactionHintPanel.SetActive(true);
+                    switchBodyPanel.SetActive(false);
                     break;
-                case Panel.SwitchPlayer:
-                    SwitchPlayerOverlay.SetActive(true);
+                case Panel.SwitchBody:
+                    switchBodyPanel.SetActive(true);
+                    interactionHintPanel.SetActive(false);
                     break;
                 case Panel.HealthDisplay1:
-                    HealthPanel1.SetActive(true);
+                    healthPanel1.SetActive(true);
                     break;
                 case Panel.HealthDisplay2:
-                    HealthPanel2.SetActive(true);
+                    healthPanel2.SetActive(true);
+                    break;
+                case Panel.HealthDisplay3:
+                    healthPanel3.SetActive(true);
+                    break;
+                case Panel.AncientAltar:
+                    ancientAltarPanel.SetActive(true);
+                    break;
+                case Panel.Recipe:
+                    recipePanel.SetActive(true);
+                    break;
+                case Panel.HealthPotion:
+                    healthPotionPanel.SetActive(true);
+                    break;
+                case Panel.MagicCrystal:
+                    magicCrystalPanel.SetActive(true);
+                    break;
+                case Panel.MagicTree:
+                    magicTreePanel.SetActive(true);
                     break;
                 default:
+                    Debug.LogWarning("Panel activated but no case to handle it");
                     break;
             }
         }
@@ -55,30 +77,54 @@ namespace Platformer.UI
         {
             switch (panelName)
             {
-                case Panel.ActivateAltar:
-                    ActivationTextOverlay.SetActive(false);
+                case Panel.InteractionHint:
+                    interactionHintPanel.SetActive(false);
                     break;
-                case Panel.SwitchPlayer:
-                    SwitchPlayerOverlay.SetActive(false);
+                case Panel.SwitchBody:
+                    switchBodyPanel.SetActive(false);
                     break;
                 case Panel.HealthDisplay1:
-                    HealthPanel1.SetActive(false);
+                    healthPanel1.SetActive(false);
                     break;
                 case Panel.HealthDisplay2:
-                    HealthPanel2.SetActive(false);
+                    healthPanel2.SetActive(false);
+                    break;
+                case Panel.HealthDisplay3:
+                    healthPanel3.SetActive(false);
+                    break;
+                case Panel.AncientAltar:
+                    ancientAltarPanel.SetActive(false);
+                    break;
+                case Panel.Recipe:
+                    recipePanel.SetActive(false);
+                    break;
+                case Panel.HealthPotion:
+                    healthPotionPanel.SetActive(false);
+                    break;
+                case Panel.MagicCrystal:
+                    magicCrystalPanel.SetActive(false);
+                    break;
+                case Panel.MagicTree:
+                    magicTreePanel.SetActive(false);
                     break;
                 default:
+                    Debug.LogWarning("Panel activated but no case to handle it");
                     break;
             }
         }
-
     }
 
     public enum Panel
     {
-        ActivateAltar,
-        SwitchPlayer,
+        InteractionHint,
+        SwitchBody,
         HealthDisplay1,
-        HealthDisplay2
+        HealthDisplay2,
+        HealthDisplay3,
+        MagicTree,
+        AncientAltar,
+        Recipe,
+        HealthPotion,
+        MagicCrystal
     }
 }

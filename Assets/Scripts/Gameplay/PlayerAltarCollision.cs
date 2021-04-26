@@ -18,7 +18,7 @@ namespace Platformer.Gameplay
 
         public override void Execute()
         {
-            _hudModel.UIController.Display(Panel.ActivateAltar);
+            _hudModel.UIController.Display(Panel.InteractionHint);
         }
     }
 }

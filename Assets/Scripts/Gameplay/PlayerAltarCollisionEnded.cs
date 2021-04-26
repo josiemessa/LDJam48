@@ -10,7 +10,7 @@ namespace Platformer.Gameplay
         private HUDModel _hudModel = Simulation.GetModel<HUDModel>();
         public override void Execute()
         {
-            _hudModel.UIController.Hide(Panel.ActivateAltar);
+            _hudModel.UIController.Hide(Panel.InteractionHint);
         }
     }
 }

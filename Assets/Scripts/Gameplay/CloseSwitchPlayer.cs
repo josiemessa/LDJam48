@@ -8,7 +8,7 @@ namespace Platformer.Gameplay
     {
         public override void Execute()
         {
-            Simulation.GetModel<HUDModel>().UIController.Hide(Panel.SwitchPlayer);
+            Simulation.GetModel<HUDModel>().UIController.Hide(Panel.SwitchBody);
         }
     }
 }
