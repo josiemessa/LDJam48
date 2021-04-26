@@ -13,7 +13,7 @@ public class PressurePlateInstance : MonoBehaviour
     private int _elapsedTickInterval = 0;
     private SpriteRenderer _spriteRenderer;
 
-    public Color colour = new Color(57, 195, 181);
+    public Color colour = new Color(.22f, .76f, .71f);
 
     private void Awake()
     {

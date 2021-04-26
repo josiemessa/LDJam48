@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Platformer.Core;
+using Platformer.Gameplay;
 using Platformer.Model;
 using TMPro;
 using UnityEngine;
@@ -15,13 +17,13 @@ namespace Platformer.UI
         [SerializeField] private GameObject interactionHintPanel;
         public TMP_Text interactionHintText;
 
-        [SerializeField] private GameObject healthPanel1;
+        public GameObject healthPanel1;
         public TMP_Text healthText1;
 
-        [SerializeField] private GameObject healthPanel2;
+        public GameObject healthPanel2;
         public TMP_Text healthText2;
 
-        [SerializeField] private GameObject healthPanel3;
+        public GameObject healthPanel3;
         public TMP_Text healthText3;
 
         [SerializeField] private GameObject switchBodyPanel;
@@ -53,18 +55,23 @@ namespace Platformer.UI
                     healthPanel3.SetActive(true);
                     break;
                 case Panel.AncientAltar:
+                    interactionHintPanel.SetActive(false);
                     ancientAltarPanel.SetActive(true);
                     break;
                 case Panel.Recipe:
+                    interactionHintPanel.SetActive(false);
                     recipePanel.SetActive(true);
                     break;
                 case Panel.HealthPotion:
+                    interactionHintPanel.SetActive(false);
                     healthPotionPanel.SetActive(true);
                     break;
                 case Panel.MagicCrystal:
+                    interactionHintPanel.SetActive(false);
                     magicCrystalPanel.SetActive(true);
                     break;
                 case Panel.MagicTree:
+                    interactionHintPanel.SetActive(false);
                     magicTreePanel.SetActive(true);
                     break;
                 default:
@@ -111,6 +118,37 @@ namespace Platformer.UI
                     Debug.LogWarning("Panel activated but no case to handle it");
                     break;
             }
+        }
+
+        public void ResetInteractionText()
+        {
+            interactionHintText.text = "Click to Interact";
+        }
+
+        public void DismissHealthPotionPanel()
+        {
+            Hide(Panel.HealthPotion);
+        }
+
+        public void DismissMagicTreePanel()
+        {
+            Hide(Panel.MagicTree);
+        }
+
+        public void DismissAncientAltarPanel() {
+            Hide(Panel.AncientAltar);
+
+            var ev = Simulation.Schedule<SetActiveBody>();
+            ev.Player = Simulation.GetModel<PlayerModel>().ActivePlayer;
+        }
+
+        public void DismissRecipePanel() {
+            Hide(Panel.Recipe);
+        }
+
+        public void DismissMagicCrystalPanel()
+        {
+            Hide(Panel.MagicCrystal);
         }
     }
 

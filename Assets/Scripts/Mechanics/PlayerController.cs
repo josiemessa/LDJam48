@@ -8,6 +8,7 @@ using Platformer.Model;
 using Platformer.Core;
 using Platformer.UI;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Platformer.Mechanics
 {
@@ -68,8 +69,29 @@ namespace Platformer.Mechanics
         private Animator _animator;
         private readonly PlayerModel _model = GetModel<PlayerModel>();
         public TMP_Text healthText;
+        public Image healthPanel;
 
         public Bounds Bounds => collider2d.bounds;
+
+        public bool HasRecipe = false;
+        public bool HasPotion = false;
+
+        public bool HasCrystal
+        {
+            get => _hasCrystal;
+            set
+            {
+                _crystalGiven = value;
+                _hasCrystal = value;
+            }
+        }
+
+        private bool _hasCrystal;
+
+        private Panel _healthPanelName;
+
+        private HUDModel _hudModel = GetModel<HUDModel>();
+        private bool _crystalGiven = false;
 
         void Awake()
         {
@@ -79,24 +101,36 @@ namespace Platformer.Mechanics
 
             // set up health
             health = GetComponent<Health>();
-            var hudModel = GetModel<HUDModel>();
             switch (Id)
             {
                 case 0:
-                    hudModel.UIController.Display(Panel.HealthDisplay1);
-                    healthText = hudModel.UIController.healthText1;
+                    _healthPanelName = Panel.HealthDisplay1;
+                    _hudModel.UIController.Display(Panel.HealthDisplay1);
+                    healthText = _hudModel.UIController.healthText1;
+                    healthPanel = _hudModel.UIController.healthPanel1.GetComponent<Image>();
                     break;
                 case 1:
-                    hudModel.UIController.Display(Panel.HealthDisplay2);
-                    healthText = hudModel.UIController.healthText2;
-                    health.maxHP = 1;
+                    _healthPanelName = Panel.HealthDisplay2;
+                    _hudModel.UIController.Display(Panel.HealthDisplay2);
+                    healthText = _hudModel.UIController.healthText2;
+                    healthPanel = _hudModel.UIController.healthPanel2.GetComponent<Image>();
+
+                    health.CurrentHp = 1;
+                    break;
+                case 2:
+                    _healthPanelName = Panel.HealthDisplay3;
+                    _hudModel.UIController.Display(Panel.HealthDisplay3);
+                    healthText = _hudModel.UIController.healthText3;
+                    healthPanel = _hudModel.UIController.healthPanel3.GetComponent<Image>();
+
+                    health.CurrentHp = 1;
                     break;
                 default:
                     Debug.Log($"unknown player ID {Id}");
                     break;
             }
 
-            healthText.text = $"{health.maxHP}";
+            healthText.text = $"{health.CurrentHp}";
 
             collider2d = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -122,6 +156,17 @@ namespace Platformer.Mechanics
                 {
                     m_stopJump = true;
                     Schedule<PlayerStopJump>().player = this;
+                }
+
+                if (_crystalGiven)
+                {
+                    _hudModel.UIController.Display(Panel.MagicCrystal);
+                    _crystalGiven = false;
+                }
+                if (Input.GetButtonDown("Consume") && HasPotion)
+                {
+                    health.CurrentHp++;
+                    HasPotion = false;
                 }
             }
             else
@@ -192,6 +237,13 @@ namespace Platformer.Mechanics
             _animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             targetVelocity = move * maxSpeed;
+        }
+
+        public void SelfDesctruct()
+        {
+            _hudModel.UIController.Hide(_healthPanelName);
+            _model.DeRegister(this);
+            Destroy(gameObject);
         }
 
         public enum JumpState

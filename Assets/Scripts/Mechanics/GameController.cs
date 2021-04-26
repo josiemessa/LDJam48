@@ -54,7 +54,7 @@ namespace Platformer.Mechanics
             if (Input.GetButtonDown("Fire2"))
             {
                 Debug.Log("Switch player");
-                Simulation.Schedule<SwitchPlayer>();
+                Simulation.Schedule<SwitchBody>();
             }
             if (Instance == this) Simulation.Tick();
         }

@@ -2,6 +2,7 @@ using Platformer.Core;
 using Platformer.Mechanics;
 using Platformer.Model;
 using Platformer.UI;
+using UnityEngine;
 
 namespace Platformer.Gameplay
 {
@@ -17,16 +18,15 @@ namespace Platformer.Gameplay
             spawnedPlayer.collider2d.enabled = true;
             // if (spawnedPlayer.audioSource && spawnedPlayer.respawnAudio)
             //     spawnedPlayer.audioSource.PlayOneShot(spawnedPlayer.respawnAudio);
-            spawnedPlayer.health.maxHP = 1;
+            spawnedPlayer.health.CurrentHp = 1;
             // spawnedPlayer.Teleport(model.spawnPoint.transform.position);
             spawnedPlayer.jumpState = PlayerController.JumpState.Grounded;
             // player.animator.SetBool("dead", false);
             spawnedPlayer.ControlEnabled = false;
+            // Debug.Log($"Setting health of new body color to white");
+            // spawnedPlayer.healthPanel.color = Color.white;
 
-            var ev = Simulation.Schedule<EnablePlayerInput>(1f);
-            ev.Player = spawnedPlayer;
-            Simulation.GetModel<HUDModel>().UIController.Display(Panel.SwitchBody);
-            Simulation.Schedule<CloseSwitchPlayer>(5f);
+            Simulation.GetModel<HUDModel>().UIController.Display(Panel.AncientAltar);
         }
     }
 }

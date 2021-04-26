@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Platformer.Gameplay
 {
-    public class SwitchPlayer : Simulation.Event<SwitchPlayer>
+    public class SwitchBody : Simulation.Event<SwitchBody>
     {
         private PlayerModel model = Simulation.GetModel<PlayerModel>();
 
@@ -15,15 +15,9 @@ namespace Platformer.Gameplay
             var playerList = model.players;
             for (int i = 0; i < playerList.Count; i++)
             {
-                if (playerList[i] != model.ActivePlayer)
-                {
-                    Debug.Log($"Player {i} was not active player");
-                    continue;
-                }
-                Debug.Log($"Player {i} is active player");
-                model.ActivePlayer.ControlEnabled = false;
+                if (playerList[i] != model.ActivePlayer) continue;
                 var newPlayer = i + 1 < playerList.Count ? playerList[i + 1] :  playerList[0];
-                var ev = Simulation.Schedule<EnablePlayerInput>();
+                var ev = Simulation.Schedule<SetActiveBody>();
                 ev.Player = newPlayer;
             }
         }

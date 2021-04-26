@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Platformer.Core;
 using Platformer.Gameplay;
 using Platformer.Mechanics;
@@ -11,17 +12,18 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class AltarInstance : MonoBehaviour
 {
+    public SpawnPoint spawnPoint;
     public bool activatable;
     private GameObject _lastSeenPlayer;
-    private PlayerController _lastSeenPlayerController;
-    private PlayerModel m_model = GetModel<PlayerModel>();
+    private readonly PlayerModel _model = GetModel<PlayerModel>();
 
     private void Update()
     {
         if (!activatable || !Input.GetButtonDown("Fire1")) return;
+
         var ev = Schedule<ActivateAltar>();
         ev.Player = _lastSeenPlayer;
-        ev.PlayerController = _lastSeenPlayerController;
+        ev.SpawnPoint = spawnPoint.transform.position;
         EndAltarActivation();
     }
 
@@ -30,7 +32,13 @@ public class AltarInstance : MonoBehaviour
         //only execute OnPlayerEnter if the player collides with this token.
         var player = other.gameObject;
         var playerCtrller = player.GetComponent<PlayerController>();
-        if (playerCtrller != null && m_model.ActivePlayer == playerCtrller && playerCtrller.health.CanActivateAltar) BeginAltarActivation(player, playerCtrller);
+        if (playerCtrller != null && _model.ActivePlayer == playerCtrller)
+        {
+            if (playerCtrller.health.CanActivateAltar)
+            {
+                BeginAltarActivation(player);
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -38,11 +46,10 @@ public class AltarInstance : MonoBehaviour
         if (other.gameObject.GetComponent<PlayerController>() != null) EndAltarActivation();
     }
 
-    void BeginAltarActivation(GameObject player, PlayerController playerController)
+    void BeginAltarActivation(GameObject player)
     {
         activatable = true;
         _lastSeenPlayer = player;
-        _lastSeenPlayerController = playerController;
         Schedule<PlayerAltarCollision>();
     }
 
@@ -50,8 +57,6 @@ public class AltarInstance : MonoBehaviour
     {
         activatable = false;
         _lastSeenPlayer = null;
-        _lastSeenPlayerController = null;
         Schedule<PlayerAltarCollisionEnded>();
-
     }
 }

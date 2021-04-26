@@ -63,12 +63,12 @@ namespace Platformer.Mechanics
         /// Teleport to some position.
         /// </summary>
         /// <param name="position"></param>
-        // public void Teleport(Vector3 position)
-        // {
-        //     body.position = position;
-        //     velocity *= 0;
-        //     body.velocity *= 0;
-        // }
+        public void Teleport(Vector3 position)
+        {
+            body.position = position;
+            velocity *= 0;
+            body.velocity *= 0;
+        }
 
         protected virtual void OnEnable()
         {

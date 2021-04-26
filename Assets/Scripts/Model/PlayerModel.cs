@@ -37,11 +37,6 @@ namespace Platformer.Model
         private PlayerController activePlayer;
 
         /// <summary>
-        /// The spawn point in the scene.
-        /// </summary>
-        public Transform spawnPoint;
-
-        /// <summary>
         /// A global jump modifier applied to all initial jump velocities.
         /// </summary>
         public float jumpModifier = 1.5f;

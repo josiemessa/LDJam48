@@ -18,17 +18,24 @@ namespace Platformer.Mechanics
             set
             {
                 activePlates = value < 0 ? 0 : value;
-                if (activePlates == _pressurePlateInstances.Length) Simulation.Schedule<PressurePlateTaskComplete>();
+                if (activePlates == _pressurePlateInstances.Length)
+                {
+                    var ev = Simulation.Schedule<PressurePlateTaskComplete>();
+                    ev._controller = this;
+
+                }
             }
         }
 
         public int tickThreshold = 12;
         public int tickInterval = 5;
+        public Collider2D Door;
+        public SpriteRenderer DoorColor;
 
         private PressurePlateInstance[] _pressurePlateInstances;
         private void Awake()
         {
-            _pressurePlateInstances = FindObjectsOfType<PressurePlateInstance>();
+            _pressurePlateInstances = GetComponentsInChildren<PressurePlateInstance>();
             foreach (var pressurePlateInstance in _pressurePlateInstances)
             {
                 pressurePlateInstance.PlateController = this;
